@@ -13,6 +13,8 @@ const socket = dgram.createSocket("udp4");
 const wsServer = new WebSocketServer({ server });
 
 const WS_PORT = 8007; //Socket
+const UDP_BROADCAST_PORT = 6666; //UDP
+const UDP_LISTEN_PORT = 5555; //UDP
 
 var wsConnection = undefined;
 const clients = {};
@@ -37,7 +39,7 @@ async function sendPostion(ID, FILE, POSTITION, timeDateNow) {
   var sendstring = ID + "%" + FILE + "%" + positionState + "%" + timeDateNow;
   console.log('[UDP] Send: "' + sendstring + '"');
   socket.setBroadcast(true);
-  socket.send(sendstring, 0, sendstring.length, 6666, "255.255.255.255");
+  socket.send(sendstring, 0, sendstring.length, UDP_BROADCAST_PORT, "255.255.255.255");
 }
 
 function getBalenaRelease() {
@@ -61,7 +63,7 @@ function getBalenaRelease() {
   });
 }
 
-socket.bind("5555");
+socket.bind(UDP_LISTEN_PORT);
 
 socket.on("listening", function () {
   const address = socket.address();

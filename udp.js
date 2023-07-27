@@ -2,7 +2,7 @@ const dgram = require("dgram");
 const socket = dgram.createSocket("udp4");
 
 var PORT = "6666";
-var LISTEN_IP = "192.168.225.222";
+var LISTEN_IP = "0.0.0.0";
 
 function initSocket(str) {
   if (process.argv.indexOf("-p") > -1) {

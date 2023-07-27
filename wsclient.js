@@ -4,8 +4,15 @@ var fs = require("fs");
 const { WebSocket } = require("ws");
 
 //const UNIPI_IP = "192.168.225.143";
-const UNIPI_IP = "192.168.225.142";
-const ws = new WebSocket("ws://" + UNIPI_IP + ":8007");
+var LISTEN_IP = "192.168.225.142";
+
+if (process.argv.indexOf("-l") > -1) {
+  let index = process.argv.indexOf("-l");
+  LISTEN_IP = process.argv[index + 1];
+  console.log("[START] -l set IP to: " + LISTEN_IP);
+}
+
+const ws = new WebSocket("ws://" + LISTEN_IP + ":8007");
 
 let debug = false;
 let wsOpen = false;
@@ -34,9 +41,6 @@ function wsInitAwait() {
 }
 
 var init = async () => {
-  console.log("[START] ...connecting to " + UNIPI_IP + ":8007");
-  await wsInitAwait();
-
   if (process.argv.indexOf("-d") > -1) {
     console.log("[START] -d startup with debug");
     debug = true;
@@ -48,11 +52,15 @@ var init = async () => {
     });
   }
 
+  console.log("[START] ...connecting to " + LISTEN_IP + ":8007");
+
+  await wsInitAwait();
+
   if (process.argv.indexOf("-t") > -1) {
     let index = process.argv.indexOf("-t");
     let playerId = process.argv[index + 1];
     let playerFile = process.argv[index + 2];
-    let playerTime = process.argv[index + 2];
+    let playerTime = process.argv[index + 3];
     let timeStamp = Date.now();
 
     console.log("[START] -t send player sync: ID: " + playerId + " FILE: " + playerFile + " TIME: " + playerTime);

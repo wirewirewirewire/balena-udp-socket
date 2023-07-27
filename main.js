@@ -14,7 +14,6 @@ const wsServer = new WebSocketServer({ server });
 
 const WS_PORT = 8007; //Socket
 const UDP_BROADCAST_PORT = 6666; //UDP
-const UDP_LISTEN_PORT = 5555; //UDP
 
 var wsConnection = undefined;
 const clients = {};
@@ -63,11 +62,17 @@ function getBalenaRelease() {
   });
 }
 
-socket.bind(UDP_LISTEN_PORT);
+function bindSocket() {
+  return new Promise((resolve, reject) => {
+    socket.bind(UDP_BROADCAST_PORT, function () {
+      resolve(true);
+    });
+  });
+}
 
 socket.on("listening", function () {
   const address = socket.address();
-  console.log("[UDP] socket listening on " + address.address + ":" + address.port);
+  console.log("[UDP] socket broadcast on " + UDP_BROADCAST_PORT);
 });
 
 server.listen(WS_PORT, () => {
@@ -119,7 +124,7 @@ var wsMessageHandler = async (messageData) => {
           playerFile = jsonData.file;
         }
         if (playerTime != undefined && playerTimestamp != undefined && playerId != undefined && playerFile != undefined) {
-          sendPostion(2, "sync.mp4", "42000", Date.now());
+          sendPostion(playerId, playerFile, playerTime, playerTimestamp);
         } else {
           console.log("[WS] ERROR: missing parameter for player sync");
         }
@@ -140,6 +145,13 @@ var socketSendMessage = async (messageData) => {
     resolve(true);
   });
 };
+
+var init = async () => {
+  console.log("[SYSTEM] init started");
+  await bindSocket();
+  console.log("[SYSTEM] init done");
+};
+init();
 
 process.on("SIGINT", async () => {
   console.log("Bye bye!");

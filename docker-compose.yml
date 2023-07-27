@@ -3,13 +3,15 @@ networks: {}
 volumes:
   data-store: {}
 services:
-  main:
+  udp-proxy:
     build:
       context: .
     privileged: true
     tty: true
     restart: always
     network_mode: host
+    ports:
+      - "8007:8007"
     volumes:
       - "data-store:/usr/src/app/drive"
     labels:

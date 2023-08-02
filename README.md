@@ -40,3 +40,22 @@ Data Example: `"2%sync.mp4%42558%1690464636403"`
 
 Client to receive UDP broadcast from the Network.
 start `node udp.js` . It listens on Port **6666** for Packages and prints them out in Terminal
+
+## Data Schema
+
+The Data that will be encoded in the UDP sring will be brough the following schema:
+**Example:**
+
+```json
+{
+  "station": "auschwitzalbum", // name of the media station
+  "slug": "videoname", //Specific Slug, can be defined individually per video
+  "language": "de" //ISO2-code
+}
+```
+
+The UDP String will be encoded as follows:
+`<station>%<slug>_<language>%<TIME>%<TIMESTAMP>"`
+
+**Example:**
+`"auschwitzalbum%videoname_de%1000%1000"`

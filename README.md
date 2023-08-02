@@ -48,7 +48,7 @@ The Data that will be encoded in the UDP sring will be brough the following sche
 
 ```json
 {
-  "station": "auschwitzalbum", // name of the media station
+  "station": "diashow", // name of the media station
   "slug": "videoname", //Specific Slug, can be defined individually per video
   "language": "de" //ISO2-code
 }
@@ -58,4 +58,4 @@ The UDP String will be encoded as follows:
 `<station>%<slug>_<language>%<TIME>%<TIMESTAMP>"`
 
 **Example:**
-`"auschwitzalbum%videoname_de%1000%1000"`
+`"diashow%videoname_de%1000%1000"`

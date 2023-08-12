@@ -20,4 +20,5 @@ jobs:
         if: success()
         with:
           balena_api_token: ${{secrets.BALENA_TOKEN}}
+          balena_url: balena-cloud.com
           balena_command: "push ${{vars.BALENA_FLEET}}-amd64"

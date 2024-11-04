@@ -40,6 +40,7 @@ Data Example: `"station-sync-001%sync-001-weiss%42558%1690464636403"`
 
 Client to receive UDP broadcast from the Network.
 start `node udp.js` . It listens on Port **6666** for Packages and prints them out in Terminal
+Use Terminal to capture the UDP Broadcasts: `sudo tcpdump -n -X udp port 6666 and src 192.168.45.XXX`
 
 ## Data Schema
 

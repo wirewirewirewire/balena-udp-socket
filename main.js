@@ -18,6 +18,8 @@ const UDP_BROADCAST_PORT = 6666; //UDP
 var wsConnection = undefined;
 const clients = {};
 
+var DEBUG = process.env.DEBUG != "true" ? false : true;
+
 function IsJsonString(str) {
   return new Promise(async (resolve, reject) => {
     var result;
@@ -36,7 +38,7 @@ async function sendPostion(ID, FILE, POSTITION, timeDateNow) {
   var positionState = POSTITION;
   //Example : "2%sync.mp4%42558%1690464636403" position in ms, timedata in ts(ms) = Date.now();
   var sendstring = ID + "%" + FILE + "%" + positionState + "%" + timeDateNow;
-  console.log('[UDP] Send: "' + sendstring + '"');
+  if (DEBUG) console.log('[UDP] Send: "' + sendstring + '"');
   socket.setBroadcast(true);
   socket.send(sendstring, 0, sendstring.length, UDP_BROADCAST_PORT, "255.255.255.255");
 }
@@ -82,7 +84,7 @@ server.listen(WS_PORT, () => {
 wsServer.on("connection", async function (connection) {
   wsConnection = connection;
   connection.on("message", function message(data) {
-    console.log("[WS] received: %s", data);
+    if (DEBUG) console.log("[WS] received: %s", data);
     wsMessageHandler(data);
   });
 
@@ -104,7 +106,7 @@ var wsMessageHandler = async (messageData) => {
   var jsonData = await IsJsonString(messageData);
 
   if (jsonData.hasOwnProperty("command")) {
-    console.log("[SYSTEM] run command: " + jsonData.command);
+    if (DEBUG) console.log("[SYSTEM] run command: " + jsonData.command);
     switch (jsonData.command) {
       case "audiosync":
         playerTime = undefined;
